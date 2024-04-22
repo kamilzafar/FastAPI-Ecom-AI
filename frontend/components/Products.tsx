@@ -43,7 +43,7 @@ const Products = async ({search}: Iprops) => {
     return (
         <div className="flex flex-col items-center justify-center w-full h-[calc(100vh-91px)] gap-2 px-4">
           <h1 className="mb-6 text-4xl font-bold">No Product Found</h1>
-          <p className="mb-4 text-lg">Server is down</p>
+          <p className="mb-4 text-lg">Server is down. Try Again</p>
         </div>
       )
 }

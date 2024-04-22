@@ -9,7 +9,7 @@ import { ICart } from '../cart/page'
 import Image from 'next/image'
 import { placeorder } from '@/actions/placeorder'
 
-const page = () => {
+const Checkout = () => {
   const [paymentmethod, setPaymentMethod] = useState('cash')
   const [data, setData] = useState<ICart[]>([])
   const [firstname, setFirstname] = useState('')
@@ -152,4 +152,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Checkout
