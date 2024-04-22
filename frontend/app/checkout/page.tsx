@@ -78,7 +78,7 @@ const page = () => {
           {/* Payment Methods */}
           <div className='mb-5 mt-10'>
             <h3 className='text-lg mb-4 font-semibold'>Payment Method</h3>
-            <RadioGroup defaultValue="cash" onValueChange={(value)=>setPaymentMethod(value)}>
+            <RadioGroup defaultValue="cash" onValueChange={(value:string)=>setPaymentMethod(value)}>
               <div className="flex items-center space-x-5">
                 <div className='space-x-2'>
                   <RadioGroupItem value="cash" id="cash" />
