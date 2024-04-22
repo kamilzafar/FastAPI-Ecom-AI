@@ -2,18 +2,15 @@ from uuid import UUID
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlmodel import select, Session
 from typing import List, Annotated, Optional
-from ecom.utils.settings import REFRESH_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from ecom.utils.settings import REFRESH_TOKEN_EXPIRE_MINUTES, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from datetime import timedelta
-from ecom.utils.services import create_order, create_product_cart, delete_cart_product, get_current_user, get_user_by_username, update_cart, user_cart, verify_password, create_access_token, signup_user
+from ecom.utils.services import get_user_by_username, verify_password, create_access_token
 from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserCreate, Userlogin
 from ecom.utils.db import lifespan, db_session
 from ecom.utils.openai import create_thread, get_response, user_chat
-
-SECRET_KEY = str(SECRET_KEY)
-ALGORITHM = ALGORITHM
-ACCESS_TOKEN_EXPIRE_MINUTES = ACCESS_TOKEN_EXPIRE_MINUTES
+from ecom.utils.crud import cancel_order, update_order, create_order, create_product_cart, delete_cart_product, get_current_user, update_cart, user_cart, signup_user
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
