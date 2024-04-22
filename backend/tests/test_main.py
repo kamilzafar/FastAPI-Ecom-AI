@@ -7,7 +7,7 @@ from sqlmodel import create_engine, Session, SQLModel
 # def test_create_user():
 #     client = TestClient(app)
 
-#     connection_string = str(settings.DATABASE_URL)
+#     connection_string = str(settings.TEST_DATABASE_URL)
 
 #     engine = create_engine(
 #         connection_string, connect_args={"sslmode": "require"}, pool_recycle=300)
@@ -35,7 +35,7 @@ from sqlmodel import create_engine, Session, SQLModel
 # def test_login_for_access_token():
 #     client = TestClient(app)
 
-#     connection_string = str(settings.TEST_DATABASE_URL)
+#     connection_string = str(settings.TEST_TEST_DATABASE_URL)
 
 #     engine = create_engine(
 #         connection_string, connect_args={"sslmode": "require"}, pool_recycle=300
@@ -66,7 +66,7 @@ from sqlmodel import create_engine, Session, SQLModel
 
 def test_get_product():
     client = TestClient(app=app)
-    connection_string = str(settings.DATABASE_URL)
+    connection_string = str(settings.TEST_DATABASE_URL)
 
     engine = create_engine(
         connection_string, connect_args={"sslmode": "require"}, pool_recycle=300)
@@ -87,7 +87,7 @@ def test_get_product():
 def test_get_product_by_slug():
     client = TestClient(app)
 
-    connection_string = str(settings.DATABASE_URL)
+    connection_string = str(settings.TEST_DATABASE_URL)
 
     engine = create_engine(
         connection_string, connect_args={"sslmode": "require"}, pool_recycle=300

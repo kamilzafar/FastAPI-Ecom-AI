@@ -1,5 +1,5 @@
-from uuid import UUID, uuid4
-from fastapi import FastAPI, Depends, HTTPException, status, Body
+from uuid import UUID
+from fastapi import FastAPI, Depends, HTTPException, status
 from sqlmodel import select, Session
 from typing import List, Annotated, Optional
 from ecom.utils.settings import REFRESH_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
@@ -7,9 +7,9 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from datetime import timedelta
 from ecom.utils.services import create_order, create_product_cart, delete_cart_product, get_current_user, get_user_by_username, update_cart, user_cart, verify_password, create_access_token, signup_user
-from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, TokenData, Token, Order, User, UserCreate, Userlogin
+from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserCreate, Userlogin
 from ecom.utils.db import lifespan, db_session
-from ecom.utils.openai import create_thread, generate_message, get_response, user_chat
+from ecom.utils.openai import create_thread, get_response, user_chat
 
 SECRET_KEY = str(SECRET_KEY)
 ALGORITHM = ALGORITHM

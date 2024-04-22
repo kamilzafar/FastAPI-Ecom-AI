@@ -1,7 +1,7 @@
-from sqlmodel import SQLModel, Field, Relationship, ColumnDefault, Column, Enum, ARRAY
+from sqlmodel import SQLModel, Field, Column, Enum
 import enum
-from typing import List, Optional, Union
-from uuid import UUID, uuid4
+from typing import List, Optional
+from uuid import UUID
 from datetime import datetime, timedelta
 
 class ProductBase(SQLModel):
