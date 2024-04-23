@@ -1,4 +1,5 @@
 "use client"
+import { updateUser } from "@/actions/editProfile"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -20,6 +21,10 @@ type User = {
 
 export function DialogDemo({name, email}: User) {
   let [username, setUsername] = useState(name) 
+  const submit = async (e) => {
+    e.preventDefault()
+    await updateUser(username)
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -32,7 +37,7 @@ export function DialogDemo({name, email}: User) {
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={(e) => {console.log(username)}}>
+        <form onSubmit={submit}>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">

@@ -10,7 +10,9 @@ export const getUser = async () =>{
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${isCookies}`
             },
-            cache: 'no-cache',
+            next: {
+                revalidate: 10
+            }
         })
         const data = await res.json()      
         return data

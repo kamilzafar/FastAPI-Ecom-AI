@@ -35,6 +35,7 @@ def update_user(user: UserUpdate, session: Annotated[Session, Depends(db_session
         raise HTTPException(status_code=404, detail="User not found")
     update_data = user.model_dump(exclude_unset=True)
     for key, value in update_data.items():
+        value = value if key != "password" else pwd_context.hash(value)
         setattr(updated_user, key, value)
     session.commit()
     session.refresh(updated_user)
