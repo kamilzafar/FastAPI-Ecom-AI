@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
+import { useToast } from "./ui/use-toast"
 
 type User = {
   name: string;
@@ -21,9 +22,13 @@ type User = {
 
 export function DialogDemo({name, email}: User) {
   let [username, setUsername] = useState(name) 
-  const submit = async (e) => {
-    e.preventDefault()
+  const {toast} = useToast()
+  const submit = async () => {
     await updateUser(username)
+    toast({
+      title: "Profile updated",
+      description: "Your profile has been updated successfully",
+    })
   }
   return (
     <Dialog>
