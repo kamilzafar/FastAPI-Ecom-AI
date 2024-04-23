@@ -1,4 +1,4 @@
-from uuid import UUID, uuid4
+from uuid import UUID
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlmodel import select, Session
 from typing import List, Annotated, Optional
@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from datetime import timedelta
 from ecom.utils.services import get_user_by_username, verify_password, create_access_token
-from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserBase, UserCreate, UserUpdate, Userlogin
+from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserCreate, UserUpdate, Userlogin
 from ecom.utils.db import lifespan, db_session
 from ecom.utils.openai import create_thread, get_response, user_chat
 from ecom.utils.crud import cancel_order, update_order, create_order, create_product_cart, delete_cart_product, get_current_user, update_cart, user_cart, signup_user
@@ -16,15 +16,21 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-app = FastAPI(title="E-commerce API", version="0.1.0", lifespan=lifespan, docs_url="/api/docs")
+app = FastAPI(
+    title="E-commerce API", 
+    description="This is an API for an e-commerce application",
+    version="0.1.0", 
+    lifespan=lifespan, 
+    docs_url="/api/docs" 
+)
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.patch("/api/user")
+@app.patch("/api/user", response_model=User)
 def update_user(user: UserUpdate, session: Annotated[Session, Depends(db_session)], current_user: Annotated[User, Depends(get_current_user)]) -> User:
-    updated_user = session.exec(select(User).filter(User.id == current_user.id)).first()
+    updated_user = session.exec(select(User).where(User.id == current_user.id)).first()
     if not updated_user:
         raise HTTPException(status_code=404, detail="User not found")
     update_data = user.model_dump(exclude_unset=True)
