@@ -226,17 +226,12 @@ def update_order(db: Session, order: OrderUpdate, user: User) -> Order:
     user = db.exec(select(User).where(User.username == user.username)).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    order = db.exec(select(Order).where(Order.user_id == user.id, Order.id == order.order_id)).first()
-    if not order:
+    orders = db.exec(select(Order).where(Order.user_id == user.id, Order.id == order.order_id)).first()
+    if not orders:
         raise HTTPException(status_code=404, detail="Order not found")
-    order.payment_method = order.payment_method
-    order.first_name = order.first_name
-    order.last_name = order.last_name
-    order.address = order.address
-    order.city = order.city
-    order.state = order.state
-    order.contact_number = order.contact_number
-    order.order_status = order.order_status
+    updated_data = order.model_dump(exclude_unset=True)
+    for key, value in updated_data.items():
+        setattr(orders, key, value)
     db.add(order)
     db.commit()
     db.refresh(order)
