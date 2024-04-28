@@ -8,6 +8,7 @@ import {
 import { getProducts } from '@/actions/getProduct'
 import { IProducts } from '@/components/Products'
 import Product_to_Cart from '@/components/Add_products'
+import { products } from '@/actions/products'
 
 interface IPage{
     params : {
@@ -60,3 +61,11 @@ const page = async ({params}: IPage) => {
 }
 
 export default page
+
+export const generateStaticParams = async () => {
+    const fetchProducts = await products();
+
+    return fetchProducts.map((product: IProducts) => ({
+        slug: product.slug
+    }))
+}
