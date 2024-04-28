@@ -46,6 +46,7 @@ const TableDemo = async () => {
             <TableHead>Method</TableHead>
             <TableHead>Address</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead className="text-right">Contact Number</TableHead>
             <TableHead className="text-right ">Amount</TableHead>
             </TableRow>
         </TableHeader>
@@ -58,13 +59,14 @@ const TableDemo = async () => {
                 <TableCell>{order.payment_method}</TableCell>
                 <TableCell>{order.address}, {order.city}, {order.state}</TableCell>
                 <TableCell>{order. order_status}</TableCell>
+                <TableCell className="text-right">{order.contact_number}</TableCell>
                 <TableCell className="text-right">{order.order_total}</TableCell>
             </TableRow>
             ))}
         </TableBody>
         <TableFooter>
             <TableRow>
-            <TableCell colSpan={6}>Total</TableCell>
+            <TableCell colSpan={7}>Total</TableCell>
             <TableCell className="text-right">{totalAmount}</TableCell>
             </TableRow>
         </TableFooter>

@@ -2,6 +2,7 @@ from uuid import UUID
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlmodel import select, Session
 from typing import List, Annotated, Optional
+from ecom.utils.open import create_thread, generate_message, get_response
 from ecom.utils.settings import REFRESH_TOKEN_EXPIRE_MINUTES, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
@@ -9,8 +10,7 @@ from datetime import timedelta
 from ecom.utils.services import get_user_by_username, verify_password, create_access_token
 from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserCreate, UserUpdate, Userlogin
 from ecom.utils.db import lifespan, db_session
-from ecom.utils.openai import create_thread, get_response, user_chat
-from ecom.utils.crud import cancel_order, update_order, create_order, create_product_cart, delete_cart_product, get_current_user, update_cart, user_cart, signup_user
+from ecom.utils.crud import cancel_order, update_order_in_db, create_order, create_product_cart, delete_cart_product, get_current_user, update_cart, user_cart, signup_user
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
@@ -21,7 +21,7 @@ app = FastAPI(
     description="This is an API for an e-commerce application",
     version="0.1.0", 
     lifespan=lifespan, 
-    docs_url="/api/docs" 
+    docs_url="/api/docs",
 )
 
 @app.get("/")
@@ -133,20 +133,20 @@ def cancel_order(order: OrderDelete, session: Annotated[Session, Depends(db_sess
 
 @app.patch("/api/order", response_model=Order)
 def update_order(order: OrderUpdate, session: Annotated[Session, Depends(db_session)], user: Annotated[User, Depends(get_current_user)]) -> Order:
-    updated_order = update_order(session, order, user)
+    updated_order = update_order_in_db(session, order, user)
     return updated_order
 
-@app.post("/api/openai/start")
-def start_a_conversation():
+@app.post("/api/openai/createthread")
+def start_a_conversation(user: Annotated[User, Depends(get_current_user)]):
     thread = create_thread()
-    return thread
+    return {"thread_id": thread}
 
-@app.post("/api/messages")
-async def message(prompt: str, thread_id: str):
-    response = await user_chat(thread_id, prompt)
-    return response
+@app.post("/api/openai/userchat")
+async def message(prompt: str, thread_id: str,token: str, user: Annotated[User, Depends(get_current_user)]):
+    response = await generate_message(prompt, thread_id, token)
+    return {"response":response}
 
 @app.get("/api/openai/getmessages")
 def messages(thread_id: str):
     messages = get_response(thread_id)
-    return {"messages": messages}
+    return {"messages" : messages}

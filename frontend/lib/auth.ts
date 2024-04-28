@@ -34,3 +34,26 @@ export const mySetCookie = (access_token: string, refresh_token: string) => {
     })
     console.log("cookie set");
 }
+
+export const setThreadID = (thread_id: string) => {
+    cookies().set({
+        name: 'thread_id',
+        value: thread_id,
+        httpOnly: true,
+        path: '/',
+        expires: new Date(Date.now() + 60 * 60 * 500),
+    })
+    console.log("thread id set");
+}
+
+
+export const getThreadID = () => {
+    const threadID = cookies().get("thread_id")?.value
+    return threadID
+}
+
+
+export const checkThreadID = () => {
+    const threadID = cookies().has("thread_id")
+    return threadID
+}

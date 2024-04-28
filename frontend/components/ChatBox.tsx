@@ -1,15 +1,18 @@
 "use client"
-import { openaiapi } from '@/actions/openai';
+
 import { useState } from 'react';
 import { LuMessageCircle } from "react-icons/lu";
-import { RxCross2 } from "react-icons/rx";
+import { RxCross2 } from "react-icons/rx"
+import Markdown from 'react-markdown';
+import { replyToUser } from './ChatData';
+import { IoAdd } from "react-icons/io5";
+import { createThread } from '@/actions/openai';
 
-
-
-const ChatBox = () => {
+const ChatBox = ({messages}: {messages?: string[]}) => {
     const [popupOpen, setPopupOpen] = useState(false);
     const [userInput, setUserInput] = useState("");
-    const [chatMessages, setChatMessages] = useState<string[]>([]);
+    const [chatMessages, setChatMessages] = useState<string[]>(messages? messages : []);
+    // const [loading, setLoading] = useState(false);  
 
     const openPopup = () => {
         setPopupOpen(!popupOpen);
@@ -41,8 +44,13 @@ const addBotMessage = (message: string) => {
     setChatMessages((prevMessages) => [...prevMessages, message]);
 };
 
+const create = async () => {
+    await createThread();
+    setChatMessages([]);
+};
+
 const respondToUser = async (userMessage: string) => {
-    const messages = await openaiapi(userMessage);
+    const messages = await replyToUser(userMessage);
     // Replace this with your chatbot logic
     setTimeout(() => {
         addBotMessage(messages);
@@ -61,12 +69,15 @@ const respondToUser = async (userMessage: string) => {
 
         {popupOpen && (
             <div style={{ boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)' }}
-                className="fixed bottom-[calc(4rem+1.5rem)] p-1 right-0 mr-4 bg-white  rounded-lg border border-[#e5e7eb] md:h-[400px] w-[400px] lg:h-[500px]">
+                className="fixed bottom-[calc(4rem+1.5rem)] p-1 right-0 mr-4 bg-white rounded-lg border border-[#e5e7eb] md:h-[400px] w-[400px] lg:h-[500px]">
                 {/* Popup content */}
                 <div className='flex  items-center'>
                     <div className="flex w-full flex-col space-y-1.5 pb-3">
                         <h2 className="font-semibold text-lg tracking-tight text-black">Chatbot</h2>
                         <p className="text-sm text-[#6b7280] leading-3">Powered by Mendable and Vercel</p>
+                    </div>
+                    <div className="flex items-center justify-center w-12 h-12">
+                        <IoAdd onClick={create} className='text-black border-none rounded-full hover:bg-slate-500 bg-inherit h-12 w-12'/>
                     </div>
                     <button
                         className="inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border rounded-full w-12 h-12  hover:bg-gray-700 cursor-pointer border-gray-200 bg-none normal-case leading-5 hover:text-gray-900"
@@ -76,7 +87,7 @@ const respondToUser = async (userMessage: string) => {
                         <RxCross2 className='text-black border-none rounded-full hover:bg-slate-500 bg-inherit h-12 w-12'/>
                     </button>
                 </div>
-                {/* Chat Container */}
+                <div>
                 <div className="pr-4 h-[474px]" style={{ minWidth: '100%', display: 'table' }}>
                     <div id="chatbox" className="p-4 h-80 overflow-y-auto">
                     {chatMessages.map((message, index) => (
@@ -84,13 +95,13 @@ const respondToUser = async (userMessage: string) => {
                             key={index}
                             className={`mb-2 ${index % 2 === 0 ? "text-right" : ""}`}
                         >
-                            <p
+                            <Markdown
                                 className={`${
                                     index % 2 === 0 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
                                 } rounded-lg py-2 px-4 inline-block`}
                             >
                                 {message}
-                            </p>
+                            </Markdown>
                         </div>
                     ))}
                     </div>
@@ -101,7 +112,7 @@ const respondToUser = async (userMessage: string) => {
                         id="user-input"
                         type="text"
                         placeholder="Type a message"
-                        className="w-80  px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-80 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={userInput}
                         onChange={handleUserInput}
                         onKeyPress={handleKeyPress}
@@ -113,6 +124,7 @@ const respondToUser = async (userMessage: string) => {
                     >
                         Send
                     </button>
+                </div>
                 </div>
             </div>
         )}

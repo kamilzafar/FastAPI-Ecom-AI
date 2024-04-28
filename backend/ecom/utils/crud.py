@@ -213,7 +213,7 @@ def create_order(db: Session, order: OrderCreate, user: User) -> Order:
     db.refresh(order)
     return order
 
-def update_order(db: Session, order: OrderUpdate, user: User) -> Order:
+def update_order_in_db(db: Session, order: OrderUpdate, user: User) -> Order:
     """
     Update the user order.
     Args:
