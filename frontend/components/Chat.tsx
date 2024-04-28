@@ -1,5 +1,5 @@
 import React from 'react'
-import { createThread, getMessages } from '@/actions/openai'
+import { getMessages } from '@/actions/openai'
 import { getThreadID } from '@/lib/auth'
 import ChatBox from './ChatBox'
 import CreateThread from './CreateThread'
