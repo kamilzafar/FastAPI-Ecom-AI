@@ -110,12 +110,12 @@ class OrderCreate(OrderBase):
     pass
 
 class OrderUpdate(OrderBase):
-    order_id: int
+    id: int
     order_status: OrderStatus
 
 class OrderDelete(SQLModel):
-    order_id: int
-    order_status: OrderStatus
+    id: int
+    order_status: OrderStatus = OrderStatus.cancelled
 
 class RequiredAction(str, enum.Enum):
     completed = "completed"

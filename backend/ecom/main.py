@@ -10,7 +10,7 @@ from datetime import timedelta
 from ecom.utils.services import get_user_by_username, verify_password, create_access_token
 from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserCreate, UserUpdate, Userlogin
 from ecom.utils.db import lifespan, db_session
-from ecom.utils.crud import cancel_order, update_order_in_db, create_order, create_product_cart, delete_cart_product, get_current_user, update_cart, user_cart, signup_user
+from ecom.utils.crud import cancel_order_in_db, update_order_in_db, create_order, create_product_cart, delete_cart_product, get_current_user, update_cart, user_cart, signup_user
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
@@ -128,7 +128,7 @@ def get_orders(user: Annotated[User, Depends(get_current_user)],session: Annotat
 
 @app.delete("/api/order", response_model=dict[str, str])
 def cancel_order(order: OrderDelete, session: Annotated[Session, Depends(db_session)], user: Annotated[User, Depends(get_current_user)]) -> dict[str, str]:
-    cancel_order(session, order, user)
+    cancel_order_in_db(session, order, user)
     return {"message": "Order cancelled"}
 
 @app.patch("/api/order", response_model=Order)

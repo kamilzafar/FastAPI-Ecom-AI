@@ -226,18 +226,18 @@ def update_order_in_db(db: Session, order: OrderUpdate, user: User) -> Order:
     user = db.exec(select(User).where(User.username == user.username)).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    orders = db.exec(select(Order).where(Order.user_id == user.id, Order.id == order.order_id)).first()
+    orders = db.exec(select(Order).where(Order.user_id == user.id, Order.id == order.id)).first()
     if not orders:
         raise HTTPException(status_code=404, detail="Order not found")
     updated_data = order.model_dump(exclude_unset=True)
     for key, value in updated_data.items():
         setattr(orders, key, value)
-    db.add(order)
+    db.add(orders)
     db.commit()
-    db.refresh(order)
-    return order
+    db.refresh(orders)
+    return orders
 
-def cancel_order(db: Session, order: OrderDelete, user: User) -> Order:
+def cancel_order_in_db(db: Session, order: OrderDelete, user: User) -> Order:
     """
     Cancel the user order.
     Args:
@@ -250,11 +250,13 @@ def cancel_order(db: Session, order: OrderDelete, user: User) -> Order:
     user = db.exec(select(User).where(User.username == user.username)).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    order = db.exec(select(Order).where(Order.id == order.order_id, Order.user_id == user.id)).first()
+    orders = db.exec(select(Order).where(Order.id == order.id, Order.user_id == user.id)).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
-    order.order_status = "cancelled"
-    db.add(order)
+    updated_data = order.model_dump(exclude_unset=True)
+    for key, value in updated_data.items():
+        setattr(orders, key, value)
+    db.add(orders)
     db.commit()
-    db.refresh(order)
+    db.refresh(orders)
     return order
