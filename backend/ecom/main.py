@@ -2,13 +2,13 @@ from uuid import UUID
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlmodel import select, Session
 from typing import List, Annotated, Optional
-from ecom.utils.open import create_thread, generate_message, get_response
+from ecom.utils.assistants import create_thread, generate_message, get_response
 from ecom.utils.settings import REFRESH_TOKEN_EXPIRE_MINUTES, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from datetime import timedelta
 from ecom.utils.services import get_user_by_username, verify_password, create_access_token
-from ecom.utils.models import Cart, CartCreate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserCreate, UserUpdate, Userlogin
+from ecom.utils.models import Cart, CartCreate, CartUpdate, OrderCreate, OrderDelete, OrderUpdate, Product, Token, Order, User, UserCreate, UserUpdate, Userlogin
 from ecom.utils.db import lifespan, db_session
 from ecom.utils.crud import cancel_order_in_db, update_order_in_db, create_order, create_product_cart, delete_cart_product, get_current_user, update_cart, user_cart, signup_user
 
@@ -107,7 +107,7 @@ def post_cart(cart: CartCreate, session: Annotated[Session, Depends(db_session)]
     return cart
 
 @app.patch("/api/cart", response_model=Cart)
-def patch_cart(cart: CartCreate, session: Annotated[Session, Depends(db_session)], user: Annotated[User, Depends(get_current_user)]) -> Cart:
+def patch_cart(cart: CartUpdate, session: Annotated[Session, Depends(db_session)], user: Annotated[User, Depends(get_current_user)]) -> Cart:
     updated_cart = update_cart(session, cart, user)
     return updated_cart
 

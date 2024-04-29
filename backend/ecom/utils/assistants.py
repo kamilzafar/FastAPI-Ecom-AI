@@ -40,21 +40,21 @@ async def generate_message(prompt: str, thread_id: str, TOKEN: str) -> str:
         """Add product to cart"""
         url = f"{BACKEND_URL}/api/cart"
         async with httpx.AsyncClient() as client:
-            response = await client.post(url,json={"product_id": product_id, "qauntity": quantity, "size": size}, headers={f"Authorization": f"Bearer {TOKEN}"})
+            response = await client.post(url,json={"product_id": product_id, "quantity": quantity, "product_size": size}, headers={f"Authorization": f"Bearer {TOKEN}"})
             return response.json()
 
     async def update_cart(product_id, quantity, size):
         """Update product in cart"""
         url = f"{BACKEND_URL}/api/cart"
         async with httpx.AsyncClient() as client:
-            response = await client.patch(url,json={"product_id": product_id, "qauntity": quantity, "size": size}, headers={f"Authorization": f"Bearer {TOKEN}"})
+            response = await client.patch(url,json={"product_id": product_id, "quantity": quantity, "product_size": size}, headers={f"Authorization": f"Bearer {TOKEN}"})
             return response.json()
         
     async def delete_cart(product_id, quantity, size):  
         """Delete product from cart"""  
         url = f"{BACKEND_URL}/api/cart"
         async with httpx.AsyncClient() as client:
-            response = await client.delete(url,json={"product_id": product_id, "qauntity": quantity, "size": size}, headers={f"Authorization": f"Bearer {TOKEN}"})
+            response = await client.delete(url,json={"product_id": product_id, "quantity": quantity, "product_size": size}, headers={f"Authorization": f"Bearer {TOKEN}"})
             return response.json()
 
     async def post_order(payment_method, first_name, last_name, address, city, state, contact_number):
@@ -68,14 +68,14 @@ async def generate_message(prompt: str, thread_id: str, TOKEN: str) -> str:
         """Update order"""
         url = f"{BACKEND_URL}/api/order"
         async with httpx.AsyncClient() as client:
-            response = await client.patch(url,json={"payment_method": payment_method, "first_name": first_name, "last_name": last_name, "address": address, "city": city, "state": state, "contact_number": contact_number, "order_id": order_id, "order_status": order_status}, headers={f"Authorization": f"Bearer {TOKEN}"})
+            response = await client.patch(url,json={"payment_method": payment_method, "first_name": first_name, "last_name": last_name, "address": address, "city": city, "state": state, "contact_number": contact_number, "id": order_id, "order_status": order_status}, headers={f"Authorization": f"Bearer {TOKEN}"})
             return response.json()
 
     async def cancel_order(order_id, order_status):
         """Cancel order"""
         url = f"{BACKEND_URL}/api/order"
         async with httpx.AsyncClient() as client:
-            response = await client.delete(url,json={"order_id": order_id, "order_status": order_status}, headers={f"Authorization": f"Bearer {TOKEN}"})
+            response = await client.delete(url,json={"id": order_id, "order_status": order_status}, headers={f"Authorization": f"Bearer {TOKEN}"})
             return response.json()  
 
     available_functions = {
