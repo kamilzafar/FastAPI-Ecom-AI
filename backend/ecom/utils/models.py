@@ -117,6 +117,33 @@ class OrderDelete(SQLModel):
     id: int
     order_status: OrderStatus = OrderStatus.cancelled
 
+class OrderProductBase(SQLModel):
+    product_id: UUID = Field(default=None, foreign_key="product.sku")
+    product_size: ProductSize
+    quantity: int
+
+class OrderProducts(OrderProductBase, table=True):
+    id: Optional[int] = Field(primary_key=True)
+    order_id: int = Field(default=None, foreign_key="order.id")
+    user_id: UUID = Field(default=None, foreign_key="user.id")
+
+class OrderProductCreate(OrderProductBase):
+    pass
+
+class OrderProductUpdate(OrderProductBase):
+    id: int
+
+
+class OrderProductDelete(SQLModel):
+    id: int
+
+class OrderProductDeleteAll(SQLModel):
+    order_id: int
+
+class OrderProductDeleteByProduct(SQLModel):
+    product_id: UUID
+    order_id: int
+
 class RequiredAction(str, enum.Enum):
     completed = "completed"
     pending = "pending"
@@ -131,17 +158,11 @@ class RunStatus(SQLModel):
     status: str
     required_action: Optional[RequiredAction]
 
+class ThreadID(SQLModel):
+    thread_id: str
+
 class ThreadMessage(SQLModel):
     content: str
-    role: str
-    hidden: bool
-    id: str
-    created_at: int
-
-
-class Thread(SQLModel):
-    messages: List[ThreadMessage]
-
 
 class CreateMessage(SQLModel):
     content: str

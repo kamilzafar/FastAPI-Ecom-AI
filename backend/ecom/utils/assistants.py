@@ -3,6 +3,7 @@ import time
 import asyncio
 from typing import List
 from openai import OpenAI
+from ecom.utils.models import ThreadMessage
 from ecom.utils.settings import OPENAI_API_KEY, ASSISTANT_ID, BACKEND_URL
 import httpx
 
@@ -170,7 +171,7 @@ async def generate_message(prompt: str, thread_id: str, TOKEN: str) -> str:
 
         await asyncio.sleep(1)  # Wait for a short period before checking again
 
-def get_response(thread_id: str) -> List[str]:
+def get_response(thread_id: str) -> List[ThreadMessage]:
     message_list: List[str] = []
     messages = client.beta.threads.messages.list(thread_id=thread_id)
     for message in messages.data:

@@ -2,7 +2,7 @@ from uuid import uuid4
 from fastapi import Depends, HTTPException, status
 from sqlmodel import Session, select
 from ecom.utils.settings import ALGORITHM, SECRET_KEY
-from ecom.utils.models import TokenData, User, UserCreate, Product, Cart, CartUpdate, CartDelete, Order, OrderCreate, OrderUpdate, OrderDelete
+from ecom.utils.models import *
 from typing import List, Annotated
 from jose import JWTError, jwt
 from ecom.utils.db import db_session
@@ -189,6 +189,7 @@ def create_product_cart(db: Session, cart: Cart, user: User) -> Cart:
     db.refresh(dbcart)
     return dbcart
 
+
 def create_order(db: Session, order: OrderCreate, user: User) -> Order:
     """
     Create a new order.
@@ -206,11 +207,13 @@ def create_order(db: Session, order: OrderCreate, user: User) -> Order:
     order_total = sum(item.product_total for item in cart)
     order = Order(user_id=user.id, payment_method=order.payment_method, order_total=order_total, first_name=order.first_name, last_name=order.last_name, address=order.address, city=order.city, state=order.state, contact_number=order.contact_number)
     db.add(order)
-    for item in cart:
-        db.delete(item)
-        db.commit()
     db.commit()
     db.refresh(order)
+    for item in cart:
+        order_product = OrderProducts(product_id=item.product_id, product_size=item.product_size, quantity=item.quantity, user_id= user.id, order_id=order.id)
+        db.add(order_product)
+        db.delete(item)
+        db.commit()
     return order
 
 def update_order_in_db(db: Session, order: OrderUpdate, user: User) -> Order:
