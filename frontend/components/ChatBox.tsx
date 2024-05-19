@@ -7,6 +7,9 @@ import Markdown from 'react-markdown';
 import { replyToUser } from './ChatData';
 import { IoAdd } from "react-icons/io5";
 import { createThread } from '@/actions/openai';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { SendIcon } from 'lucide-react';
 
 const ChatBox = ({messages}: {messages?: string[]}) => {
     const [popupOpen, setPopupOpen] = useState(false);
@@ -69,9 +72,9 @@ const respondToUser = async (userMessage: string) => {
 
         {popupOpen && (
             <div style={{ boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)' }}
-                className="fixed bottom-[calc(4rem+1.5rem)] p-1 right-0 mr-4 bg-white rounded-lg border border-[#e5e7eb] md:h-[400px] w-[400px] lg:h-[500px]">
+                className="fixed z-10 bottom-[calc(4rem+1.5rem)] p-1 right-0 mr-4 bg-white rounded-lg border border-[#e5e7eb] md:h-[400px] w-[400px] lg:h-[500px]">
                 {/* Popup content */}
-                <div className='flex  items-center'>
+                <div className='flex items-center'>
                     <div className="flex w-full flex-col space-y-1.5 pb-3">
                         <h2 className="font-semibold text-lg tracking-tight text-black">Chatbot</h2>
                         <p className="text-sm text-[#6b7280] leading-3">Powered by Mendable and Vercel</p>
@@ -88,43 +91,44 @@ const respondToUser = async (userMessage: string) => {
                     </button>
                 </div>
                 <div>
-                <div className="pr-4 h-[474px]" style={{ minWidth: '100%', display: 'table' }}>
-                    <div id="chatbox" className="p-4 h-80 overflow-y-auto">
-                    {chatMessages.map((message, index) => (
-                        <div
-                            key={index}
-                            className={`mb-2 ${index % 2 === 0 ? "text-right" : ""}`}
-                        >
-                            <Markdown
-                                className={`${
-                                    index % 2 === 0 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
-                                } rounded-lg py-2 px-4 inline-block`}
-                            >
-                                {message}
-                            </Markdown>
+                    <div className="pr-4 h-[474px]" style={{ minWidth: '100%', display: 'table' }}>
+                        <div id="chatbox" className="p-4 h-80 overflow-y-auto">
+                            {chatMessages.map((message, index) => (
+                                <div
+                                    key={index}
+                                    className={`mb-2 ${index % 2 === 0 ? "text-right" : ""}`}
+                                >
+                                    <Markdown
+                                        className={`${
+                                            index % 2 === 0 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                                        } rounded-lg py-2 px-4 inline-block`}
+                                    >
+                                        {message}
+                                    </Markdown>
+                                </div>
+                            ))}
                         </div>
-                    ))}
                     </div>
-                </div>
-                {/* Input box */}
-                <div className="flex fixed bottom-[calc(4rem+1.5rem)]">
-                    <input
-                        id="user-input"
-                        type="text"
-                        placeholder="Type a message"
-                        className="w-80 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={userInput}
-                        onChange={handleUserInput}
-                        onKeyPress={handleKeyPress}
-                    />
-                    <button
-                        id="send-button"
-                        className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300"
-                        onClick={handleSendMessage}
-                    >
-                        Send
-                    </button>
-                </div>
+                    {/* Input box */}
+                    <div className="flex fixed bottom-[calc(4rem+1.5rem)] w-[390px] items-center bg-gray-100 dark:bg-gray-900 px-4 py-3 rounded-b-lg">
+                        <Input
+                            id='user-input'
+                            className="flex-1 bg-transparent border-none focus:ring-0 dark:text-white"
+                            placeholder="Type your message..."
+                            type="text"
+                            value={userInput}
+                            onChange={handleUserInput}
+                            onKeyPress={handleKeyPress}
+                        />
+                        <Button 
+                            id='send-button'
+                            className="ml-2"
+                            onClick={handleSendMessage}
+                        >
+                            <SendIcon className="h-5 w-5" />
+                            <span className="sr-only">Send</span>
+                        </Button>
+                    </div>
                 </div>
             </div>
         )}
