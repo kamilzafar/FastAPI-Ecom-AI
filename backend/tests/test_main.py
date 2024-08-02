@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from ecom.main import app
 from ecom.utils.db import db_session
-from ecom.utils import settings
+from ecom import settings
 from sqlmodel import create_engine, Session, SQLModel
 
 def test_read_main():

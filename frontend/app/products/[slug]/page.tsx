@@ -26,7 +26,7 @@ const page = async ({params}: IPage) => {
                 {images.map((img, index) => {
                     return(
                         <div key={index} className='flex space-x-4'>
-                        <Image src={img} alt={product.name} key={index} className='rounded-t-lg object-cover' width={850} height={1150} />
+                            <Image src={img} alt={product.name} key={index} className='rounded-t-lg object-cover' width={850} height={1150} />
                         </div>
                     )
                 }

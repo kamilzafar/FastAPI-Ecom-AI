@@ -4,7 +4,7 @@ import asyncio
 from typing import List
 from openai import OpenAI
 from ecom.utils.models import ThreadMessage
-from ecom.utils.settings import OPENAI_API_KEY, ASSISTANT_ID, BACKEND_URL
+from ecom.settings import OPENAI_API_KEY, ASSISTANT_ID, BACKEND_URL
 import httpx
 
 client: OpenAI = OpenAI(api_key=str(OPENAI_API_KEY))

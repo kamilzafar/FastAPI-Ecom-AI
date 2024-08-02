@@ -1,7 +1,7 @@
 from uuid import uuid4
 from fastapi import Depends, HTTPException, status
 from sqlmodel import Session, select
-from ecom.utils.settings import ALGORITHM, SECRET_KEY
+from ecom.settings import ALGORITHM, SECRET_KEY
 from ecom.utils.models import *
 from typing import List, Annotated
 from jose import JWTError, jwt

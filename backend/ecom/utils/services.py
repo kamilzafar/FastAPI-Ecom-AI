@@ -1,7 +1,7 @@
 from jose import jwt
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-from ecom.utils.settings import *
+from ecom.settings import *
 from ecom.utils.models import User
 from datetime import datetime, timedelta, timezone
 from sqlmodel import Session, select

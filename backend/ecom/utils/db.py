@@ -1,13 +1,13 @@
 from contextlib import asynccontextmanager
 from sqlmodel import SQLModel, create_engine, Session, select
 from fastapi import FastAPI
+from ecom import settings
 
-# Create the database engine
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+connection_string = str(settings.DATABASE_URL)
 
-connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
+engine = create_engine(
+    connection_string, connect_args={}, pool_recycle=300
+)
 
 # Create the tables
 def create_db_and_tables():

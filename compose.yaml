@@ -21,6 +21,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
+    restart: always
     ports:
       - "8000:8000"
     env_file:
@@ -39,7 +40,11 @@ services:
     ports:
         - '5433:5432'
     volumes:
-        - postgres_db:/var/lib/postgresql/data
+        - postgres_db:/var/lib/postgresql/datazz
+
+volumes:
+  postgres_db:
+    driver: local
     
 networks:
   default:
