@@ -21,5 +21,5 @@ This project is a full-stack e-commerce application developed with FastAPI for t
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/kamilzafar/FastAPI-Ecom.git
-cd FastAPI-Ecom
+git clone https://github.com/kamilzafar/FastAPI-Ecom-AI.git
+cd FastAPI-Ecom-AI
